@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #f4f6fb;
+  background: #aca9a9;
   padding: 20px;
 }
 
@@ -47,3 +47,28 @@ body {
   display: block;
   margin-top: 5px;
 }
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #e3e8ff;
+}
+
+.tab.active {
+  background: #0e0203;
+  color: white;
+}
+
+
