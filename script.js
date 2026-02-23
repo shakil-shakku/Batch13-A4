@@ -80,3 +80,86 @@ const jobs =[
         status:"All"
     },
 ]
+
+let activeTab = "All";
+
+
+function updateCounts() {
+  document.getElementById("totalCount").innerText = jobs.length;
+  document.getElementById("interviewCount").innerText = jobs.filter(s => s.status === "Interview").length;
+  document.getElementById("rejectedCount").innerText = jobs.filter(s => s.status === "Rejected").length;
+}
+
+function renderJobs() {
+  const container = document.getElementById("jobContainer");
+  container.innerHTML = "";
+  
+  let filtered = activeTab === "All" ? jobs : jobs.filter(s => s.status === activeTab);
+
+  document.getElementById("sectionCount").innerText = filtered.length + " Jobs";
+
+  filtered.forEach(job => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div>
+        <h3>${job.position}</h3>
+        <div class="information">${job.company}  ${job.location}</div>
+        <div class="information">${job.type}</div>
+        <div class="salary">${job.salary}</div>
+        <div class="description">${job.description}</div>
+      </div>
+      <div class="buttons">
+        <button class="interview-btn">Interview</button>
+        <button class="reject-btn">Rejected</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    `;
+
+     const interviewBtn = card.querySelector(".interview-btn");
+    const rejectBtn = card.querySelector(".reject-btn");
+    const deleteBtn = card.querySelector(".delete-btn");
+
+    interviewBtn.onclick = () => {
+      job.status = job.status === "Interview" ? "All" : "Interview";
+      updateCounts();
+      renderJobs();
+    };
+
+    rejectBtn.onclick = () => {
+      job.status = job.status === "Rejected" ? "All" : "Rejected";
+      updateCounts();
+      renderJobs();
+    };
+ deleteBtn.onclick = () => {
+      const index = jobs.findIndex(s => s.id === job.id);
+      jobs.splice(index,1);
+      updateCounts();
+      renderJobs();
+    };
+
+    container.appendChild(card);
+  });
+
+  if(filtered.length === 0){
+    container.innerHTML = `
+      <div class="empty">
+        <img src="/jobs.png"/>
+        <h3>No jobs Available</h3>
+        <p>You have not added any jobs in this section yet.</p>
+      </div>`;
+    return;
+  }
+   updateCounts();
+}
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(s => s.classList.remove("active"));
+    tab.classList.add("active");
+    activeTab = tab.dataset.tab;
+    renderJobs();
+  });
+});
+
+renderJobs();
